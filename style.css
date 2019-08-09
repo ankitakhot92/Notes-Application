@@ -1,0 +1,155 @@
+* {
+    box-sizing: border-box;
+    padding:2px;
+}
+.container {
+    background:#bdb9b7;
+    border: 1px solid black;
+    width: 80%;
+    height:70%;
+    margin:auto;
+    postion:absolute;
+}
+.header {
+    background:#efebe9;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #a69b97;
+    margin-bottom: 30px;
+}
+.form {
+    background:#efebe9;
+    border: 1px solid gray;
+    margin-left:3px;
+    float:left;
+}
+#footer {
+    background:#efebe9;
+}
+.header h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 40px;
+    text-align: center;
+}
+.footer {
+    padding-top: 19px;
+    color: #777;
+    border-top: 1px solid #e5e5e5;
+}
+#footer p {
+    text-align: center;
+}
+label {
+    float:left;
+    width:auto;
+    margin-left:45%;
+}
+.form {
+    width:42%;
+    margin-bottom:20px;
+    display: inline-block;
+}
+body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+input {
+    margin-top:2px 2px;
+    padding:4px;
+    padding-right: 24px;
+}
+.form-control {
+    width:98%;
+    border: 1px solid gray;
+    margin:2px;
+}
+#submit {
+    margin-left:36%;
+    height: 30px;
+    width:50px;
+    float:left;
+}
+#updateBtn {
+    margin-left:4%;
+    height: 30px;
+    width:50px;
+}
+textarea {
+    width: 40%;
+    height: 60%;
+    padding:4px;
+}
+#title, #notes, #date {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-top: 2px;
+    width:90%;
+}
+.row {
+    display:inline-block;
+    overflow:scroll;
+    width:55%;
+    padding:2px;
+    height:350px;
+    margin:2px;
+    border: 1px solid gray;
+    margin-left:8px;
+}
+.column {
+    border: 1px solid gray;
+}
+.well {
+    border: 1px solid gray;
+    height:150px;
+    margin:0px;
+    padding:6px;
+    background:#efebe9;
+}
+.viewNote {
+    background:#efebe9;
+    border: 1px solid gray;
+    padding:6px;
+    margin:0px;
+    word-wrap: break-word;
+}
+.button:hover, #submit:hover, #updateBtn:hover, #resetBtn:hover {
+    background: black;
+    color: white;
+}
+#notesResults {
+    overflow-y: scroll;
+}
+
+.button { 
+    cursor: pointer;
+    text-align: center;
+    padding:2px;
+}
+input[disabled] { 
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.close-icon {
+    position:absolute;
+    width:5px;
+    height:27px;
+    margin-left: -20px;
+    background:transparent;
+    cursor: pointer;
+    text-align: center;
+    padding-right: 12px;
+}
+#reset1 {
+   top:178px; 
+}
+#reset2 {
+   top:371px; 
+}
+@media only screen and (max-width:620px) {
+  /* For mobile phones: */
+  .form, .row, .row1 {
+    width:97%;
+  }
+}
+

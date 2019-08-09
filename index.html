@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>My Notes App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    
+    <body>
+        <div class="container">
+            <div class="header">
+                <h3>My Notes Application</h3>
+            </div>
+            
+            <div class="form">
+                <form id="myForm">
+                    <div class="form-control">
+                        <label><b>Title</b></label><br><br>
+                        <input type="text" id="title" class="search-box" autocomplete=off>
+                        <input type="button" class="close-icon" id="reset1" value="X">
+                    </div>
+                    <div class="form-control" style="height:230px;">
+                        <label><b>Notes</b></label><br><br>
+                        <textarea id="notes"></textarea>
+                        <input type="button" class="close-icon" id="reset2" value="X">
+                    </div>
+                    <input type="submit" id="submit" class="button" value="Save">
+                    <input type="button" id="updateBtn" class="button" value="Update">
+                </form>
+            </div>
+            
+            <div class="row">
+                <div class="column">
+                    <div id="notesResults">
+                    
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row1">
+                <div class="column1">
+                    <div id="viewNote">
+                    
+                    </div>
+                </div>
+            </div>
+            
+            <footer id="footer">
+                 <p>2019 MyNotes, Inc.</p>
+            </footer>
+        </div>
+        
+        <script>
+            //add listen to save 
+            document.getElementById("myForm").addEventListener('submit',saveNotes);
+            displayDetails();
+            document.getElementById("updateBtn").disabled = true;
+            
+            function saveNotes(e) {
+                var id = localStorage.getItem("id");
+                if(id == undefined || id == null){
+                    localStorage.setItem("id",1);
+                }
+                e.preventDefault();
+                //get data
+                var title = document.getElementById("title").value;
+                var note = document.getElementById("notes").value;
+                
+                if(localStorage.getItem("myNotes") === null){
+                    id=1;
+                    var nid = id;
+                }else{
+                    var myNotes = JSON.parse(localStorage.getItem("myNotes"));
+                    var nid = myNotes.nid;
+                }
+                
+                //making an object
+                var notes = {
+                    "title":title,
+                    "note":note,
+                    "nid":1
+                    
+                }
+                
+                
+                var valid = validate(title, note);
+                if(valid){
+                //check if array is present in local storage
+                if(localStorage.getItem("myNotes") === null){
+                    //initialize array
+                    var myNotes = [];
+                    //adding to array
+                    myNotes.push(notes);
+                    //resetting the array in local storage
+                    localStorage.setItem('myNotes',JSON.stringify(myNotes));
+                }
+                
+                else {
+                    var myNotes = JSON.parse(localStorage.getItem("myNotes"));
+                    var id = localStorage.getItem("id");
+                    id = Number(id);
+                    id += 1;
+                    localStorage.setItem("id",id);
+                    notes.nid = id;
+                    myNotes.push(notes);
+                    //resetting
+                    localStorage.setItem('myNotes',JSON.stringify(myNotes));
+                                         }
+                //clear form
+                document.getElementById("myForm").reset();
+                
+                //fetch form details
+                displayDetails();
+            }}
+            
+            function displayDetails(){
+                var myNotes = JSON.parse(localStorage.getItem('myNotes'));
+                //get output id
+                var notesResults = document.getElementById("notesResults");
+                //build output
+
+                notesResults.innerHTML='';
+                var i;
+                if(myNotes == null){
+                    
+                }else{
+                    for(i=0;i<myNotes.length;i++) {
+                    var title = myNotes[i].title;
+                    var note = myNotes[i].note;
+                    var nid = myNotes[i].nid;
+                    if(title.length > 15){
+                        title = title.substring(0,15)+"...";
+                    }
+                    
+                    if(note.length > 30){
+                        note = note.substring(0,48)+"...";
+                    }
+                    
+                    
+                    notesResults.innerHTML += '<div class="well">'+
+                                  '<h3>'+title+'</h3>'+
+                                  '<p>'+note+'</p>'+
+                                  ' <button class="button" onclick="editNote(\''+nid+'\')">Edit</button>' +
+                                  ' <button class="button" onclick="viewNote(\''+nid+'\')">View</button>' +
+                                  ' <button class="button" onclick="deleteNote(\''+nid+'\')">Delete</button>' +
+                                  '</div>';
+                
+                    }
+                }
+            }
+            
+            
+                function deleteNote(nid) {
+                    var myNotes = JSON.parse(localStorage.getItem('myNotes'));
+                    var viewNote = document.getElementById("viewNote");
+                    viewNote.innerHTML='';
+                    
+                    for(var i=0;i<myNotes.length;i++){
+                        if(nid == myNotes[i].nid) {
+                            myNotes.splice(i,1);
+                        }
+                    
+                    }
+                    
+                    //reset back to local storage
+                    localStorage.setItem('myNotes',JSON.stringify(myNotes));
+                    
+                    //re-fetching back
+                    displayDetails();
+                    
+                }
+            
+            
+                function editNote(nid){
+                    document.getElementById("updateBtn").disabled = false;
+                    document.getElementById("submit").disabled = true;
+                    var myNotes=JSON.parse(localStorage.getItem('myNotes'));
+                    var i;
+                    for(i=0;i<myNotes.length;i++){
+                        if(nid == myNotes[i].nid){
+                            document.getElementById("title").value=myNotes[i].title;
+                            document.getElementById("notes").value=myNotes[i].note;
+                            
+                            }
+                         }
+                document.getElementById("updateBtn").addEventListener('click',function(){
+                var title = document.getElementById("title").value;
+                var note = document.getElementById("notes").value;
+                valid = validate(title,note);
+                if(valid){
+                var myNotes=JSON.parse(localStorage.getItem('myNotes'));
+                    for (var i = 0; i < myNotes.length; i++) {
+                       if(nid == myNotes[i].nid){  //look for match with id
+                           myNotes[i].title = title;  
+                           myNotes[i].note = note;  
+                           break;  //exit loop since you found the id
+                                       
+                       }
+                    }
+                    localStorage.setItem('myNotes',JSON.stringify(myNotes));  //reset back to local storage
+                                
+                    //clear form
+                    document.getElementById("myForm").reset();
+                    
+                    location.reload();
+                }});
+                            
+            }
+  
+            
+                function viewNote(nid){
+                    var viewNote = document.getElementById("viewNote");
+                    viewNote.innerHTML='';
+                    var myNotes =JSON.parse(localStorage.getItem('myNotes'));
+                    var i;
+                    for(i=0;i<myNotes.length;i++){
+                        if(nid == myNotes[i].nid){
+                            var title = myNotes[i].title;
+                            var note = myNotes[i].note;
+                            
+                            viewNote.innerHTML ='<div class="viewNote">'+'<h2>'+title+'</h2>'+'<p>'+note+'</p>'+'</div>'; 
+                        }
+                    }
+                }
+            
+            function validate(title, note){
+                if(title == ''){
+                    alert("Please provide a title");
+                    valid = false;
+                    return valid;
+                }
+                if(note == ''){
+                    alert("You must write something in Note");
+                    valid = false;
+                    return valid;
+                }else{
+                    return true;
+                }
+            }
+            
+            //function to reset title input field
+            document.getElementById("reset1").addEventListener('click',function(){
+                document.getElementById("title").value = "";
+            })
+            
+            //function to reset note textarea field
+            document.getElementById("reset2").addEventListener('click',function(){
+                document.getElementById("notes").value = "";
+            })
+            
+
+        </script>
+        
+    </body>
+</html>
